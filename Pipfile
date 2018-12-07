@@ -4,6 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+flask = "*"
+line-bot-sdk = "*"
 
 [dev-packages]
 
