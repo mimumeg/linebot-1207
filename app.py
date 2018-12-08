@@ -8,7 +8,8 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, QuickReplyButton, MessageAction, QuickReply, TextSendMessage)
+    MessageEvent, TextMessage, CarouselColumn,
+    TemplateSendMessage, CarouselTemplate)
 
 app = Flask(__name__)
 
@@ -36,13 +37,29 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def response_message(event):
-    language_list = ["Ruby", "Python", "PHP", "Java", "C"]
+    # notesのCarouselColumnの各値は、変更してもらって結構です。
+    notes = [CarouselColumn(thumbnail_image_url="https://renttle.jp/static/img/renttle02.jpg",
+                            title="【ReleaseNote】トークルームを実装しました。",
+                            text="creation(創作中・考え中の何かしらのモノ・コト)に関して、意見を聞けるようにトークルーム機能を追加しました。",
+                            actions=[
+                                {"type": "message", "label": "サイトURL", "text": "https://renttle.jp/notes/kota/7"}]),
 
-    items = [QuickReplyButton(action=MessageAction(label=f"{language}", text=f"{language}が好き")) for language in
-             language_list]
+             CarouselColumn(thumbnail_image_url="https://renttle.jp/static/img/renttle03.jpg",
+                            title="ReleaseNote】創作中の活動を報告する機能を追加しました。",
+                            text="創作中や考え中の時点の活動を共有できる機能を追加しました。",
+                            actions=[
+                                {"type": "message", "label": "サイトURL", "text": "https://renttle.jp/notes/kota/6"}]),
 
-    messages = TextSendMessage(text="どの言語が好きですか？",
-                               quick_reply=QuickReply(items=items))
+             CarouselColumn(thumbnail_image_url="https://renttle.jp/static/img/renttle04.jpg",
+                            title="【ReleaseNote】タグ機能を追加しました。",
+                            text="「イベントを作成」「記事を投稿」「本を登録」にタグ機能を追加しました。",
+                            actions=[
+                                {"type": "message", "label": "サイトURL", "text": "https://renttle.jp/notes/kota/5"}])]
+
+    messages = TemplateSendMessage(
+        alt_text='template',
+        template=CarouselTemplate(columns=notes),
+    )
 
     line_bot_api.reply_message(event.reply_token, messages=messages)
 
