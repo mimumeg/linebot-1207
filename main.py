@@ -54,11 +54,10 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=talk[event.message.text]))
     else:
-        print("わんわん")
-        # line_bot_api.reply_message(
-        #     event.reply_token,
-        #     TextSendMessage(text=event.message.text))
-
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage("わんわん"))
+        # text=event.message.text
 
 if __name__ == "__main__":
     #    app.run()
