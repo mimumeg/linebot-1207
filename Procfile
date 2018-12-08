@@ -1,1 +1,1 @@
-web: python confirm.py
+web: python app.py
