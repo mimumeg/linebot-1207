@@ -3,8 +3,8 @@ import json
 import urllib.error
 
 url = 'https://api.line.me/v2/bot/message/push'
-channel_access_token = '[作成したchannel_access_token]'
-user_id = '[Your user IDに表示されている値]'
+channel_access_token = '[qS9zXpoiYmzb7+dWfXM6+IDgFTfyNOinhOwrp3eBesBDyZLMJKUDPjhJBTn86sR1VGCDHQY15+RXx5YjLq3NR1jR5UmneTqlAMr3fxwyC3BWiPW0AKMl8ezgROVS5Iiv6j553vWEd1Qsq9jPgIs54AdB04t89/1O/w1cDnyilFU=]'
+user_id = '[U723f832780a5c27a07e12c5797cf5c10]'
 # 送信用のデータ
 data = {
     'to': user_id,
