@@ -1,30 +1,62 @@
-# -*- coding:utf-8 -*-
-import json
-import urllib.error
+import os
 
-url = 'https://api.line.me/v2/bot/message/push'
-channel_access_token = '[qS9zXpoiYmzb7+dWfXM6+IDgFTfyNOinhOwrp3eBesBDyZLMJKUDPjhJBTn86sR1VGCDHQY15+RXx5YjLq3NR1jR5UmneTqlAMr3fxwyC3BWiPW0AKMl8ezgROVS5Iiv6j553vWEd1Qsq9jPgIs54AdB04t89/1O/w1cDnyilFU=]'
-user_id = '[U723f832780a5c27a07e12c5797cf5c10]'
-# 送信用のデータ
-data = {
-    'to': user_id,
-    'messages': [
-        {
-            'type': 'text',
-            'text': 'Hello, world! from api'
-        }
-    ]
+from flask import Flask, request, abort
+from linebot import (
+    LineBotApi, WebhookHandler
+)
+from linebot.exceptions import (
+    InvalidSignatureError
+)
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage,
+)
+
+app = Flask(__name__)
+talk = {
+    "こんにちは": "こんにちは！",
+    "好き": "私も❤️",
 }
-jsonstr = json.dumps(data)
-print(jsonstr)
-# Content-Type:application/json
-# Authorization:Bearer {channel access token}
-# method:post
-request = urllib.Request(url, data=jsonstr)
-request.add_header('Content-Type', 'application/json')
-request.add_header('Authorization', 'Bearer ' + channel_access_token)
-request.get_method = lambda: 'POST'
-# 送信実行
-response = urllib.urlopen(request)
-ret = response.read()
-print('Response:', ret)
+
+# 環境変数取得
+YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
+YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
+
+line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
+handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+
+
+@app.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+
+    # get request body as text
+    body = request.get_data(as_text=True)
+
+    app.logger.info("Request body: " + body)
+
+    # handle webhook body
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    return 'OK'
+
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    if event.message.text in talk:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=talk[event.message.text]))
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=event.message.text))
+
+
+if __name__ == "__main__":
+    #    app.run()
+    port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
