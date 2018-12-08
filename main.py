@@ -1,65 +1,41 @@
 import os
 
-from flask import Flask, request, abort
+from flask import Flask
 from linebot import (
     LineBotApi, WebhookHandler
 )
-from linebot.exceptions import (
-    InvalidSignatureError
-)
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
-)
+    MessageEvent, TextMessage)
 
 app = Flask(__name__)
-talk = {
-    "おはよう": "おはよう",
-    "こんにちは": "こんにちは",
-    "かわいい": "もちろん(ドヤっ)",
-    "好き": "ありがとう❤️",
-    "触っていい？": "おかねちょうだい！"
-}
 
-# 環境変数取得
-YOUR_CHANNEL_ACCESS_TOKEN = os.environ["ACCESS_TOKEN"]
-YOUR_CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
-
-line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(YOUR_CHANNEL_SECRET)
-
-
-@app.route("/callback", methods=['POST'])
-def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
-
-    # get request body as text
-    body = request.get_data(as_text=True)
-
-    app.logger.info("Request body: " + body)
-
-    # handle webhook body
-    try:
-        handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-
-    return 'OK'
-
+line_bot_api = LineBotApi(os.environ["ACCESS_TOKEN"])
+handler = WebhookHandler(os.environ["CHANNEL_SECRET"])
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if event.message.text in talk:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=talk[event.message.text]))
-    else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage("わんわん"))
-        # text=event.message.text
+    ### 相手のプロフィールを取得
+    profile = line_bot_api.get_profile(event.source.user_id)
 
-if __name__ == "__main__":
-    #    app.run()
-    port = int(os.getenv("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    ### コンファームテンプレートメッセージを作る
+
+    confirm_template_message = TemplateSendMessage(
+        alt_text='Confirm template',
+        template=ConfirmTemplate(
+            text=profile.display_name + 'さん\nアンケートにご協力ください。',
+            actions=[
+                PostbackAction(
+                    label='YES',
+                    data='yes',
+                ),
+                MessageAction(
+                    label='NO',
+                    text='no')
+            ]
+        )
+    )
+
+    ### コンファームテンプレートメッセージを送る
+    line_bot_api.reply_message(
+        event.reply_token, confirm_template_message
+    )
