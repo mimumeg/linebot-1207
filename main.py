@@ -54,7 +54,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=talk[event.message.text]))
     else:
-        return "わんわん"
+        print("わんわん")
         # line_bot_api.reply_message(
         #     event.reply_token,
         #     TextSendMessage(text=event.message.text))
