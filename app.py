@@ -41,8 +41,8 @@ def response_message(event):
                              title="もふ？非もふ？",
                              text="素直にお答え下さい♪",
                              actions=[
-                                 {"type": "message", "label": "はい"},
-                                 {"type": "message", "label": "いいえ"}
+                                 {"type": "message", "label": "はい", "text": "https//www.google.com"},
+                                 {"type": "message", "label": "いいえ", "text": "https//www.google.com"}
                              ])
 
              # ButtonsTemplate(thumbnail_image_url="https://renttle.jp/static/img/renttle03.jpg",
