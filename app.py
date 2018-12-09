@@ -37,10 +37,11 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def response_message(event):
     # notesのCarouselColumnの各値は、変更してもらって結構です。
-    notes = [CarouselColumn(thumbnail_image_url="https://matome.naver.jp/odai/2142302304823215801/2142302490524539303",
-                            title="もふ？非もふ？",
-                            text="直感的にお答え下さい！",
-                            actions=[
+    notes = [CarouselColumn(
+        thumbnail_image_url="http://up.gc-img.net/post_img_web/2014/04/46410298610cd0f350a9835d5ed5713d_20566.jpeg",
+        title="もふ？非もふ？",
+        text="直感的にお答え下さい！",
+        actions=[
                                 {"type": "message", "label": "もふ💕", "text": "https://www.google.com"},
                                 {"type": "message", "label": "非もふ⚡", "text": "https://www.google.com"}])
 
