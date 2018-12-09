@@ -37,11 +37,12 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def response_message(event):
     # notesのCarouselColumnの各値は、変更してもらって結構です。
-    notes = [CarouselColumn(thumbnail_image_url="https://renttle.jp/static/img/renttle02.jpg",
-                            title="【ReleaseNote】トークルームを実装しました。",
-                            text="creation(創作中・考え中の何かしらのモノ・コト)に関して、意見を聞けるようにトークルーム機能を追加しました。",
+    notes = [CarouselColumn(thumbnail_image_url="https://matome.naver.jp/odai/2142302304823215801/2142302490524539303",
+                            title="もふ？非もふ？",
+                            text="直感的にお答え下さい！",
                             actions=[
-                                {"type": "message", "label": "サイトURL", "text": "https://renttle.jp/notes/kota/7"}]),
+                                {"type": "message", "label": "もふ💕", "text": "https://www.google.com"},
+                                {"type": "message", "label": "非もふ⚡", "text": "https://www.google.com"}])
 
              # CarouselColumn(thumbnail_image_url="https://renttle.jp/static/img/renttle03.jpg",
              #                title="ReleaseNote】創作中の活動を報告する機能を追加しました。",
