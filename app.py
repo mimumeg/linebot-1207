@@ -41,7 +41,9 @@ def response_message(event):
                              title="もふ？非もふ？",
                              text="素直にお答え下さい♪",
                              actions=[
-                                 {"type": "message", "label": "サイトURL", "text": "https://renttle.jp/notes/kota/7"}]),
+                                 {"type": "message", "label": "はい"},
+                                 {"type": "message", "label": "いいえ"}
+                             ])
 
              # ButtonsTemplate(thumbnail_image_url="https://renttle.jp/static/img/renttle03.jpg",
              #                title="ReleaseNote】創作中の活動を報告する機能を追加しました。",
