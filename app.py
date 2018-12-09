@@ -38,7 +38,7 @@ def callback():
 def response_message(event):
     # notesのCarouselColumnの各値は、変更してもらって結構です。
     notes = [CarouselColumn(
-        thumbnail_image_url="http://image.itmedia.co.jp/l/im/nl/articles/1801/15/l_miya_180113usagikochokocho01.jpg",
+        thumbnail_image_url="http://livedoor.blogimg.jp/mamesoku/imgs/e/5/e548fce7.jpg",
         title="もふ？非もふ？",
         text="直感的にお答え下さい！",
         actions=[
